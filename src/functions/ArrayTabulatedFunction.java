@@ -6,6 +6,9 @@ public class ArrayTabulatedFunction {
     private int cnt;
 
     public ArrayTabulatedFunction(double leftX, double rightX, int pointsCount) {
+        if (leftX >= rightX || pointsCount < 2){
+            throw new IllegalArgumentException();
+        }
         points = new FunctionPoint[pointsCount + pointsCount / 2];
         this.points[0] = new FunctionPoint(leftX, 0);
         cnt = pointsCount;
@@ -16,13 +19,9 @@ public class ArrayTabulatedFunction {
     }
 
     public ArrayTabulatedFunction(double leftX, double rightX, double[] values) {
-
-        points = new FunctionPoint[values.length + values.length / 2];
-        this.points[0] = new FunctionPoint(leftX, values[0]);
-        cnt = values.length;
-
-        for (int i = 1; i < values.length; i++) {
-            this.points[i] = new FunctionPoint(this.points[i - 1].getX() + (rightX - leftX) / (values.length - 1), values[i]);
+        this(leftX, rightX, values.length);
+        for (int i = 0; i < values.length; i++){
+            this.points[i].setX(values[i]);
         }
     }
 
@@ -85,30 +84,46 @@ public class ArrayTabulatedFunction {
             return new FunctionPoint(this.points[index]);
         }
         else {
-            return null;
+            throw new FunctionPointIndexOutOfBoundsException("Out of bound");
         }
     }
 
-    public void setPoint(int index, FunctionPoint point) {
-        if (index >= 0 && index < cnt || point.getX() >= this.points[index - 1].getX() && point.getX() <= this.points[index + 1].getX()) {
+    public void setPoint(int index, FunctionPoint point) throws InappropriateFunctionPointException {
+        if (point.getX() >= this.points[index - 1].getX() && point.getX() <= this.points[index + 1].getX()){
+            throw new InappropriateFunctionPointException("Inappropriate x value");
+        }
+        if (index >= 0 && index < cnt) {
             this.points[index].setX(point.getX());
             this.points[index].setY(point.getY());
+        }
+        else {
+            throw new FunctionPointIndexOutOfBoundsException("Out of bound");
         }
     }
 
     public double getPointX(int index) {
         if (index >= 0 && index < cnt) { return new FunctionPoint(this.points[index]).getX(); }
-        else { return Double.NaN; }
+        else {
+            throw new FunctionPointIndexOutOfBoundsException("Out of bound");
+        }
     }
 
     public double getPointY(int index) {
         if (index >= 0 && index < cnt) { return new FunctionPoint(this.points[index]).getY(); }
-        else { return Double.NaN; }
+        else {
+            throw new FunctionPointIndexOutOfBoundsException("Out of bound");
+        }
     }
 
-    public void setPointX(int index, double x) {
-        if (x >= this.points[index - 1].getX() && x <= this.points[index + 1].getX() || index >= 0 && index < cnt) {
+    public void setPointX(int index, double x) throws InappropriateFunctionPointException {
+        if (!(x >= this.points[index - 1].getX() && x <= this.points[index + 1].getX())){
+            throw new InappropriateFunctionPointException("Inappropriate x value");
+        }
+        if (index >= 0 && index < cnt) {
             this.points[index].setX(x);
+        }
+        else {
+            throw new FunctionPointIndexOutOfBoundsException("Out of bound");
         }
     }
 
@@ -116,12 +131,18 @@ public class ArrayTabulatedFunction {
         if (index >= 0 && index < cnt) {
             this.points[index].setY(y);
         }
+        else {
+            throw new FunctionPointIndexOutOfBoundsException("Out of bound");
+        }
     }
 
     public void deletePoint(int index) {
         if (index >= 0 && index < cnt) {
             System.arraycopy(this.points, index + 1, this.points, index, this.getPointsCount() - index);
             --cnt;
+        }
+        else {
+            throw new FunctionPointIndexOutOfBoundsException("Out of bound");
         }
     }
 

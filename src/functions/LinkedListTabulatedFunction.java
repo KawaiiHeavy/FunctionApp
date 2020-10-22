@@ -66,7 +66,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         int fromHead = index;
         int fromCurrent = Math.abs(currentIndex - index);
 
-        if (fromTail < fromHead) { //ищем от куда быстрее добраться до нужного индекса
+        if (fromTail < fromHead) { //ищем оптимальный индекс начала движения
             if (fromTail < fromCurrent) {
                 currentElement = tail;
                 currentIndex = pointsCount - 1;
@@ -78,7 +78,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
             }
         }
 
-        if (index < currentIndex) { //нашли индекс от куда быстрее добраться, теперь выбираем вперед двигаться или назад
+        if (index < currentIndex) { //выбираем направление движения
             while (currentIndex != index) {
                 currentElement = currentElement.prev;
                 currentIndex--;
@@ -174,10 +174,6 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         return head.point.getX();
     }
 
-    /**
-     *
-     * @return double
-     */
     @Override
     public double getRightDomainBorder() {
         if (pointsCount == 0) {
@@ -186,21 +182,11 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         return tail.point.getX();
     }
 
-    /**
-     *
-     * @return int
-     */
     @Override
     public int getPointsCount() {
         return pointsCount;
     }
 
-    /**
-     *
-     * @param index
-     * @param point
-     * @throws InappropriateFunctionPointException
-     */
     @Override
     public void setPoint(int index, FunctionPoint point) throws InappropriateFunctionPointException {
 
@@ -224,7 +210,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
             ;
         }
 
-        if (left > point.getX() || right < point.getX()) {
+        if (!(point.getX() > left || point.getX() < right)) {
             throw new InappropriateFunctionPointException("Inappropriate function value");
         }
 
@@ -232,11 +218,6 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
 
     }
 
-    /**
-     *
-     * @param index
-     * @return double
-     */
     @Override
     public double getPointX(int index) {
         if (pointsCount == 0) {
@@ -248,12 +229,6 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         return getNodeByIndex(index).point.getX();
     }
 
-    /**
-     *
-     * @param index
-     * @param x
-     * @throws InappropriateFunctionPointException
-     */
     @Override
     public void setPointX(int index, double x) throws InappropriateFunctionPointException {
         if (pointsCount == 0) {
@@ -281,11 +256,6 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         node.point.setX(x);
     }
 
-    /**
-     *
-     * @param index
-     * @return double
-     */
     @Override
     public double getPointY(int index) {
         if (pointsCount == 0) {
@@ -297,11 +267,6 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         return getNodeByIndex(index).point.getY();
     }
 
-    /**
-     *
-     * @param index
-     * @param y
-     */
     @Override
     public void setPointY(int index, double y) {
         if (pointsCount == 0) {
@@ -313,11 +278,6 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         getNodeByIndex(index).point.setY(y);
     }
 
-    /**
-     *
-     * @param x
-     * @return double
-     */
     @Override
     public double getFunctionValue(double x) {
         if (pointsCount == 0) {
@@ -343,10 +303,6 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         return k * x + b;
     }
 
-    /**
-     *
-     * @param index
-     */
     @Override
     public void deletePoint(int index) {
         if (pointsCount < 3) {
@@ -359,11 +315,6 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         deleteNodeByIndex(index);
     }
 
-    /**
-     *
-     * @param point
-     * @throws InappropriateFunctionPointException
-     */
     @Override
     public void addPoint(FunctionPoint point) throws InappropriateFunctionPointException {
         if (pointsCount != 0 && (point.getX() < head.point.getX() || point.getX() > tail.point.getX())) {
