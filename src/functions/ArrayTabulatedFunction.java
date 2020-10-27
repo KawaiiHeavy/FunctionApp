@@ -1,6 +1,8 @@
 package functions;
 
-public class ArrayTabulatedFunction {
+import java.io.Serializable;
+
+public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
 
     private FunctionPoint[] points;
     private int cnt;
@@ -23,6 +25,17 @@ public class ArrayTabulatedFunction {
         for (int i = 0; i < values.length; i++){
             this.points[i].setX(values[i]);
         }
+    }
+
+    public ArrayTabulatedFunction(FunctionPoint[] points){
+        if (points[0].getX() >= points[points.length - 1].getX() || points.length < 2){
+            throw new IllegalArgumentException();
+        }
+        this.points = new FunctionPoint[points.length + points.length / 2];
+        for (int i = 0; i < points.length; i++){
+            this.points[i] = points[i];
+        }
+        cnt = points.length;
     }
 
     public int getPointsCount() {

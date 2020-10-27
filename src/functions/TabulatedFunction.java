@@ -1,18 +1,6 @@
 package functions;
 
-public interface TabulatedFunction {
-
-    /**
-     *
-     * @return
-     */
-    public double getLeftDomainBorder();
-
-    /**
-     *
-     * @return
-     */
-    public double getRightDomainBorder();
+public interface TabulatedFunction extends Function{
 
     /**
      *
@@ -56,13 +44,6 @@ public interface TabulatedFunction {
      * @param y
      */
     public void setPointY(int index, double y);
-
-    /**
-     *
-     * @param x
-     * @return
-     */
-    public double getFunctionValue(double x);
 
     /**
      *

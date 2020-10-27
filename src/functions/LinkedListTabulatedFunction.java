@@ -1,6 +1,8 @@
 package functions;
 
-public class LinkedListTabulatedFunction implements TabulatedFunction {
+import java.io.Serializable;
+
+public class LinkedListTabulatedFunction implements TabulatedFunction, Serializable {
 
     private FunctionNode head, tail;
     private FunctionNode mainHead = new FunctionNode();
@@ -59,6 +61,34 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         tail.point.setY(values[i]);
     }
 
+    public LinkedListTabulatedFunction(FunctionPoint[] points){
+        if (points[0].getX() >= points[points.length - 1].getX() || points.length < 2){
+            throw new IllegalArgumentException();
+        }
+        head = new FunctionNode();
+        FunctionNode current = new FunctionNode();
+
+        head.prev = mainHead;
+        head.point = points[0];
+        head.next = current;
+
+        current.prev = head;
+        currentIndex++;
+
+        for (int i = 1; i < points.length; i++, currentIndex++, current = current.next){
+            current.next = new FunctionNode();
+            current.next.prev = current;
+            current.point = points[i];
+            current.prev = head;
+        }
+
+        tail = current.prev;
+        tail.next = mainHead;
+
+        mainHead.prev = tail;
+        mainHead.next = head;
+        pointsCount = points.length;
+    }
 
     public FunctionNode getNodeByIndex(int index) {
         //Индексы точки отправления
